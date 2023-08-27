@@ -1,26 +1,30 @@
-import nodemailer from "nodemailer";
+import { NextApiRequest, NextApiResponse } from 'next';
+import nodemailer from 'nodemailer';
 
-export default async function handler(req, res) {
-  if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
   const { name, mobilenumber, email } = req.body;
 
   // Create a transporter with your email provider details
   const transporter = nodemailer.createTransport({
-    service: "gmail", // e.g., 'Gmail'
+    service: 'gmail',
     auth: {
-      user: "zkconnectt@gmail.com",
-      pass: "bndbswpvujhzthge",
+      user: 'zkconnectt@gmail.com',
+      pass: 'bndbswpvujhzthge',
     },
   });
 
   // Email configuration
   const mailOptions = {
-    from: "zkconnectt@gmail.com",
+    from: 'zkconnectt@gmail.com',
     to: email,
-    subject: "Welcome to Zk Connect",
+    subject: 'Welcome to Zk Connect',
     html: `
       <h1>Hi ${name},</h1>
       <p>Welcome to Zk Connect! Your registration is successful.</p>
@@ -35,9 +39,9 @@ export default async function handler(req, res) {
 
   try {
     await transporter.sendMail(mailOptions);
-    res.status(200).json({ message: "Email sent successfully" });
+    res.status(200).json({ message: 'Email sent successfully' });
   } catch (error) {
-    console.error("Error sending email:", error);
-    res.status(500).json({ message: "Email sending failed" });
+    console.error('Error sending email:', error);
+    res.status(500).json({ message: 'Email sending failed' });
   }
 }
